@@ -123,13 +123,13 @@ const Hero = () => {
 
       </div>
 
-      {/* Scroll Down Button - EXACT FOOTER STYLE & SPEED */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex justify-center z-20">
+      {/* Scroll Down Button - Optimized for Mobile & Desktop */}
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
             const target = document.documentElement.scrollHeight;
             const start = window.scrollY;
-            const duration = 6000; // Original "Meme Speed" as footer
+            const duration = 6000;
             let startTime = null;
 
             const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -142,11 +142,21 @@ const Hero = () => {
             };
             requestAnimationFrame(step);
           }}
-          className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-[#4093DB]/30 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all duration-500 cursor-pointer animate-float shadow-lg shadow-blue-500/10"
           aria-label="Scroll down to services"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 9l6 6 6-6" />
+          <svg 
+            width="18" 
+            height="18" 
+            className="md:w-5 md:h-5"
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="3" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
           </svg>
         </button>
       </div>

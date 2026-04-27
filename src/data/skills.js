@@ -1,0 +1,16 @@
+export const techStack = [
+  { name: 'JavaScript', iconPath: 'javascript/javascript-original.svg', color: '#F7DF1E' },
+  { name: 'TypeScript', iconPath: 'typescript/typescript-original.svg', color: '#3178C6' },
+  { name: 'React', iconPath: 'react/react-original.svg', color: '#61DAFB' },
+  { name: 'PHP', iconPath: 'php/php-original.svg', color: '#777BB4' },
+  { name: 'Laravel', iconPath: 'laravel/laravel-original.svg', color: '#FF2D20' },
+  { name: 'Java', iconPath: 'java/java-original.svg', color: '#E76F00' },
+  { name: 'SpringBoot', iconPath: 'spring/spring-original.svg', color: '#6DB33F' },
+  { name: 'Tailwind', iconPath: 'tailwindcss/tailwindcss-original.svg', color: '#06B6D4' },
+  { name: 'Bootstrap', iconPath: 'bootstrap/bootstrap-original.svg', color: '#7952B3' },
+  { name: 'MySQL', iconPath: 'mysql/mysql-original.svg', color: '#4479A1' },
+  { name: 'MongoDB', iconPath: 'mongodb/mongodb-original.svg', color: '#47A248' },
+  { name: 'Node.js', iconPath: 'nodejs/nodejs-original.svg', color: '#339933' },
+  { name: 'Express.js', iconPath: 'express/express-original.svg', color: '#000000', darkFilter: true },
+  { name: 'Vite', iconPath: 'vitejs/vitejs-original.svg', color: '#646CFF' },
+];

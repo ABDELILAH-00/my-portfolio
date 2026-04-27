@@ -1,0 +1,39 @@
+name: Security Audit Gate
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Composer Audit
+      working-directory: ./backend
+      run: composer audit
+
+    - name: NPM Audit
+      run: npm audit
+
+    - name: Check for .env committed
+      run: |
+        if [ -f "backend/.env" ]; then
+          echo "FAIL: .env file found in repository!"
+          exit 1
+        fi
+        echo "PASS: No .env file found."

@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #F3F4F6;
+    --bg-surface: #ffffff;
+    --accent: #4093DB;
+    --accent-soft: rgba(64, 147, 219, 0.08);
+    --text-primary: #111827;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+  }
+
+  html,
+  body {
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased min-h-screen selection:bg-[#CDE3F7] selection:text-slate-900;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer components {
+  .saas-card {
+    @apply bg-white border border-[var(--border-color)] rounded-2xl transition-all duration-300;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-pill {
+    @apply flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 font-medium;
+  }
+
+  .sidebar-pill-active {
+    @apply bg-[#f3f4f6] text-[#111827];
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full hover:bg-slate-300;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2.5s infinite linear;
+  }
+
+  /* ── Professional Button System ── */
+  .btn-primary {
+    background-color: #111827;
+    color: #ffffff;
+    border: 1.5px solid #111827;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #374151;
+    border: 1.5px solid #d1d5db;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-outline:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #111827;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+}

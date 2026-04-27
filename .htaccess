@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Replicate SGG Architecture: Automatically route all traffic to the public/ directory
+    # This allows Apache to handle the routing while Laravel stays secure.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

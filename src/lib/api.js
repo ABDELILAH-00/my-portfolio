@@ -17,8 +17,10 @@ export const getAssetUrl = (path) => {
   // Strip leading /storage if already present to avoid /storage/storage duplication
   const cleanPath = path.replace(/^\/storage/, '');
   
-  // Use relative path for storage so it works in both dev (via Vite proxy) and production
-  const baseUrl = '/storage';
+  // Use the API base URL to point to the correct storage location in production
+  const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+  const baseUrl = apiBase ? apiBase.replace(/\/api\/?$/, '/storage') : '/storage';
+  
   return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
 };
 

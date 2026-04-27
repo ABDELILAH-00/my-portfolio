@@ -123,8 +123,8 @@ const Hero = () => {
 
       </div>
 
-      {/* Scroll Down Button - Optimized for Mobile & Desktop */}
-      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex justify-center z-20">
+      {/* Scroll Down Button - Positioned over photo on Mobile, centered on Desktop */}
+      <div className="absolute top-[280px] right-8 md:top-auto md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
             const target = document.documentElement.scrollHeight;
@@ -142,21 +142,11 @@ const Hero = () => {
             };
             requestAnimationFrame(step);
           }}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-[#4093DB]/30 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all duration-500 cursor-pointer animate-float shadow-lg shadow-blue-500/10"
+          className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
           aria-label="Scroll down to services"
         >
-          <svg 
-            width="18" 
-            height="18" 
-            className="md:w-5 md:h-5"
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="3" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 9l6 6 6-6" />
           </svg>
         </button>
       </div>

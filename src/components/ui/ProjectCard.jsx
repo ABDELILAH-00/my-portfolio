@@ -27,8 +27,8 @@ const ProjectCard = ({ project }) => {
   const techToShow = showAllTech ? displayTech : displayTech.slice(0, 3);
   const extraTechCount = showAllTech ? 0 : Math.max(0, displayTech.length - 3);
 
-  // FIXED IMAGE VISIBILITY - REMOVED FLICKER FOR INSTANT FILTERING
-  const thumbnailUrl = project.thumbnail_url || getAssetUrl(project.thumbnail) || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop';
+  // Prioritize our smart helper to avoid incorrect server-generated URLs (like 127.0.0.1)
+  const thumbnailUrl = getAssetUrl(project.thumbnail) || project.thumbnail_url || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop';
 
   return (
     <div className="flex flex-col h-full min-h-[320px] overflow-hidden rounded-xl border border-black/10 bg-white">

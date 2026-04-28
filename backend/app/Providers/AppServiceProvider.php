@@ -22,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         Queue::failing(function (JobFailed $event) {
             Log::channel('critical')->error('Queue job failed: ' . $event->job->getName(), [
                 'connection' => $event->connectionName,

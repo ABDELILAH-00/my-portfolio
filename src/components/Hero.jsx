@@ -67,22 +67,7 @@ const Hero = () => {
             </a>
             <button
               onClick={async () => {
-                const cvUrl = '/cv-download';
-                window.open(cvUrl, '_blank');
-                try {
-                  const response = await fetch(cvUrl);
-                  const blob = await response.blob();
-                  const url = window.URL.createObjectURL(blob);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = 'ABDELILAH_AMALAS_CV.pdf';
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
-                } catch (err) {
-                  console.error('Download failed', err);
-                }
+                window.open('/cv.pdf', '_blank');
               }}
               className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900/80 hover:text-[#4093DB] transition-all relative group flex items-center gap-2 cursor-pointer"
             >

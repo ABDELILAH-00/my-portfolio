@@ -14,8 +14,8 @@ export const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
   
-  // Use HTTPS to avoid Mixed Content errors on Netlify.
-  const baseUrl = 'https://abdelilah-portfolio.wuaze.com/public/storage';
+  // Use relative /storage path. Our Netlify Function will proxy this and spoof the User-Agent.
+  const baseUrl = '/storage';
   
   // Ensure the path doesn't start with / if baseUrl already has one
   const cleanPath = path.replace(/^\/storage/, '').replace(/^\//, '');

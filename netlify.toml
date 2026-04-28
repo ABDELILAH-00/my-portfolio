@@ -2,22 +2,21 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
-# Proxy API requests to InfinityFree backend
+# Route ALL api calls through our smart proxy function
 [[redirects]]
   from = "/api/*"
-  to = "http://abdelilah-portfolio.wuaze.com/api/:splat"
+  to = "/.netlify/functions/proxy"
   status = 200
-  force = true
 
-# Proxy storage/image requests to InfinityFree backend
+# Route ALL storage/image calls through our smart proxy function
 [[redirects]]
   from = "/storage/*"
-  to = "http://abdelilah-portfolio.wuaze.com/public/storage/:splat"
+  to = "/.netlify/functions/proxy"
   status = 200
-  force = true
 
-# SPA fallback - must be LAST
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -1,4 +1,4 @@
-export const MASTER_PROJECTS = [
+export const projectsData = [
   {
     id: 1,
     title: "SGG Conges App",
@@ -21,9 +21,13 @@ export const MASTER_PROJECTS = [
   }
 ];
 
-export const MASTER_SKILLS = [
+export const skillsData = [
   { id: 1, name: "React", level: 95, category: "Frontend", icon: "react" },
   { id: 2, name: "Laravel", level: 90, category: "Backend", icon: "laravel" },
   { id: 3, name: "JavaScript", level: 92, category: "Frontend", icon: "javascript" },
   { id: 4, name: "Tailwind", level: 95, category: "Design", icon: "tailwindcss" }
 ];
+
+// Fallback names for components already updated
+export const MASTER_PROJECTS = projectsData;
+export const MASTER_SKILLS = skillsData;

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
-import { projectsData } from '../data/master_data';
 import ProjectCard from './ui/ProjectCard';
 
 const fetchProjects = async () => {

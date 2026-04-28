@@ -1,42 +1,56 @@
-const axios = require('axios');
-
-exports.handler = async (event, context) => {
-  const path = event.path.replace('/api/', '');
-  const isStorage = event.path.includes('/storage/');
+exports.handler = async (event) => {
+  const path = event.path;
+  const isStorage = path.includes('/storage/');
   
-  // The actual URL on InfinityFree
-  const targetUrl = isStorage 
-    ? `http://abdelilah-portfolio.wuaze.com/public${event.path}`
-    : `http://abdelilah-portfolio.wuaze.com/public/api/${path}`;
+  // Correction de l'URL cible
+  let targetUrl;
+  if (isStorage) {
+    // Les images sont dans public/storage/...
+    targetUrl = `http://abdelilah-portfolio.wuaze.com/public${path}`;
+  } else {
+    // Les routes API passent par l'URL de base
+    const apiPath = path.replace('/api/', '');
+    targetUrl = `http://abdelilah-portfolio.wuaze.com/api/${apiPath}`;
+  }
+
+  console.log("Proxying to:", targetUrl);
 
   try {
-    const response = await axios({
+    const requestOptions = {
       method: event.httpMethod,
-      url: targetUrl,
-      data: event.body ? JSON.parse(event.body) : null,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': isStorage ? 'image/*' : 'application/json',
         'X-ADMIN-KEY': event.headers['x-admin-key'] || '',
-      },
-      responseType: isStorage ? 'arraybuffer' : 'json'
-    });
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': response.headers['content-type'],
-      },
-      body: isStorage 
-        ? Buffer.from(response.data).toString('base64') 
-        : JSON.stringify(response.data),
-      isBase64Encoded: isStorage
+        'Content-Type': 'application/json'
+      }
     };
+
+    if (event.body && (event.httpMethod === 'POST' || event.httpMethod === 'PUT')) {
+      requestOptions.body = event.body;
+    }
+
+    const response = await fetch(targetUrl, requestOptions);
+    
+    if (isStorage) {
+      const buffer = await response.arrayBuffer();
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': response.headers.get('content-type') || 'image/webp', 'Access-Control-Allow-Origin': '*' },
+        body: Buffer.from(buffer).toString('base64'),
+        isBase64Encoded: true
+      };
+    } else {
+      const data = await response.text();
+      return {
+        statusCode: response.status,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        body: data
+      };
+    }
   } catch (error) {
     return {
-      statusCode: error.response?.status || 500,
-      body: JSON.stringify({ error: error.message })
+      statusCode: 500,
+      body: JSON.stringify({ error: "Proxy Error: " + error.message })
     };
   }
 };

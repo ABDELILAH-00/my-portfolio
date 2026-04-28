@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // FORCED RELATIVE PATH: This forces the Netlify Proxy to handle the connection and bypass CORS
-  baseURL: '/api',
-  withCredentials: false,
+  // Direct connection to InfinityFree to allow browser cookie sharing
+  baseURL: 'https://abdelilah-portfolio.wuaze.com/api',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -14,8 +14,8 @@ export const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
   
-  // Use relative /storage path. Our Netlify Function will proxy this and spoof the User-Agent.
-  const baseUrl = '/storage';
+  // Direct link to InfinityFree for images. Since it's an <img> tag, the browser handles the cookie.
+  const baseUrl = 'https://abdelilah-portfolio.wuaze.com/public/storage';
   
   // Ensure the path doesn't start with / if baseUrl already has one
   const cleanPath = path.replace(/^\/storage/, '').replace(/^\//, '');

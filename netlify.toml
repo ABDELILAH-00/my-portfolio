@@ -2,19 +2,6 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  functions = "netlify/functions"
-
-# Route ALL api calls through our smart proxy function
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/proxy"
-  status = 200
-
-# Route ALL storage/image calls through our smart proxy function
-[[redirects]]
-  from = "/storage/*"
-  to = "/.netlify/functions/proxy"
-  status = 200
 
 # SPA fallback
 [[redirects]]

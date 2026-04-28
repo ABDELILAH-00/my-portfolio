@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // Replicating SGG Master Architecture: Support for environment variable in production
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  // FORCED RELATIVE PATH: This forces the Netlify Proxy to handle the connection and bypass CORS
+  baseURL: '/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

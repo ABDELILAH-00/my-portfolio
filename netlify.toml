@@ -1,0 +1,24 @@
+# Netlify Build Configuration
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Proxy API requests to InfinityFree backend (eliminates CORS entirely)
+[[redirects]]
+  from = "/api/*"
+  to = "https://abdelilah-portfolio.wuaze.com/api/:splat"
+  status = 200
+  force = true
+
+# Proxy storage/image requests to InfinityFree backend
+[[redirects]]
+  from = "/storage/*"
+  to = "https://abdelilah-portfolio.wuaze.com/storage/:splat"
+  status = 200
+  force = true
+
+# SPA fallback - must be LAST
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

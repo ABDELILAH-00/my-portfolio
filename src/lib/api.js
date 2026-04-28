@@ -17,9 +17,8 @@ export const getAssetUrl = (path) => {
   // Strip leading /storage if already present to avoid /storage/storage duplication
   const cleanPath = path.replace(/^\/storage/, '');
   
-  // Use the API base URL to point to the correct storage location in production
-  const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-  const baseUrl = apiBase ? apiBase.replace(/\/api\/?$/, '/storage') : '/storage';
+  // Use relative /storage path. Netlify proxy will handle the redirection to the backend.
+  const baseUrl = '/storage';
   
   return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
 };

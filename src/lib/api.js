@@ -3,7 +3,7 @@ import axios from 'axios';
 const api = axios.create({
   // FORCED RELATIVE PATH: This forces the Netlify Proxy to handle the connection and bypass CORS
   baseURL: '/api',
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'

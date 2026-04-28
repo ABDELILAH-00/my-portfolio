@@ -3,10 +3,10 @@
   command = "npm run build"
   publish = "dist"
 
-# Proxy API requests to InfinityFree backend (eliminates CORS entirely)
+# Proxy API requests to InfinityFree backend
 [[redirects]]
   from = "/api/*"
-  to = "http://abdelilah-portfolio.wuaze.com/public/api/:splat"
+  to = "http://abdelilah-portfolio.wuaze.com/api/:splat"
   status = 200
   force = true
 

@@ -14,8 +14,8 @@ const About = () => {
   const { data: projects = projectsData } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
-      const { data } = await api.get('../api/live_data.json');
-      return data.projects;
+      const { data } = await api.get('/projects');
+      return Array.isArray(data) ? data : data.data;
     },
     staleTime: 1000,
     initialData: projectsData,
@@ -25,8 +25,8 @@ const About = () => {
   const { data: skills = skillsData } = useQuery({
     queryKey: ['skills-public'],
     queryFn: async () => {
-      const { data } = await api.get('../api/live_data.json');
-      return data.skills;
+      const { data } = await api.get('/skills');
+      return Array.isArray(data) ? data : data.data;
     },
     staleTime: 1000,
     initialData: skillsData,

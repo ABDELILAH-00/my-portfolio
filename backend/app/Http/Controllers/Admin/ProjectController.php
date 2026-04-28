@@ -31,6 +31,7 @@ class ProjectController extends Controller
         $data['thumbnail'] = $this->handleImageUpload($request->input('thumbnail'));
         
         $project = Project::create($data);
+        Cache::forget('public_projects');
         return response()->json(['status' => 'success', 'message' => 'Projet créé avec succès', 'data' => $project], 201);
     }
 
@@ -48,6 +49,7 @@ class ProjectController extends Controller
         }
 
         $project->update($data);
+        Cache::forget('public_projects');
         return response()->json(['status' => 'success', 'message' => 'Projet mis à jour avec succès', 'data' => $project]);
     }
 
@@ -61,6 +63,7 @@ class ProjectController extends Controller
         }
 
         $project->delete();
+        Cache::forget('public_projects');
         return response()->json(['status' => 'success', 'message' => 'Projet supprimé avec succès']);
     }
 

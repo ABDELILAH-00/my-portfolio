@@ -3,10 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import { projectsData } from '../data/master_data';
 import ProjectCard from './ui/ProjectCard';
+
 const fetchProjects = async () => {
-  // Fetch from the static 'Live' file for 5ms real-time response
-  const { data } = await api.get('../api/live_data.json');
-  return data.projects;
+  const { data } = await api.get('/projects');
+  // Laravel returns the array directly or inside a data property depending on your resource collection
+  return Array.isArray(data) ? data : data.data;
+};
+
+const fetchSkills = async () => {
+  const { data } = await api.get('/skills');
+  return Array.isArray(data) ? data : data.data;
 };
 
 // Local SVG icons to avoid lucide-react version issues

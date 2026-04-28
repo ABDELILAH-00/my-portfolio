@@ -31,6 +31,7 @@ class SkillController extends Controller
         }
 
         $skill = Skill::create($validator->validated());
+        Cache::forget('public_skills');
         return response()->json(['status' => 'success', 'message' => 'Compétence créée avec succès', 'data' => $skill], 201);
     }
 
@@ -40,11 +41,13 @@ class SkillController extends Controller
         if (!$skill) return response()->json(['status' => 'error', 'message' => 'Compétence non trouvée'], 404);
 
         $skill->delete();
+        Cache::forget('public_skills');
         return response()->json(['status' => 'success', 'message' => 'Compétence supprimée avec succès']);
     }
 
     public function reorder(Request $request)
     {
+        Cache::forget('public_skills');
         return response()->json(['status' => 'success', 'message' => 'Compétences réordonnées avec succès']);
     }
 }

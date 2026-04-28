@@ -10,8 +10,8 @@ const Skills = () => {
   const { data: techStack = skillsData } = useQuery({
     queryKey: ['skills-public'],
     queryFn: async () => {
-      const { data } = await api.get('../api/live_data.json');
-      return data.skills;
+      const { data } = await api.get('/skills');
+      return Array.isArray(data) ? data : data.data;
     },
     staleTime: 1000,
     initialData: skillsData,

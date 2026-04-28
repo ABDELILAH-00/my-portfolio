@@ -31,7 +31,10 @@ const AdminLogin = () => {
       await login(email, password);
       navigate('/admin');
     } catch (err) {
-      setStatus({ message: err.response?.data?.message || 'Identifiants invalides', type: 'error' });
+      const errorMsg = err.response?.data?.message || err.message || 'Erreur inconnue';
+      console.error("DEBUG LOGIN:", err.response);
+      alert("ERREUR CONNEXION: " + errorMsg + "\n\nConsultez la console F12 pour plus de détails.");
+      setStatus({ message: errorMsg, type: 'error' });
     } finally {
       setLoading(false);
     }

@@ -14,13 +14,13 @@ export const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
   
-  // Strip leading /storage if already present to avoid /storage/storage duplication
-  const cleanPath = path.replace(/^\/storage/, '');
+  // Use HTTPS to avoid Mixed Content errors on Netlify.
+  const baseUrl = 'https://abdelilah-portfolio.wuaze.com/public/storage';
   
-  // Use relative /storage path. Netlify proxy will handle the redirection to the backend.
-  const baseUrl = '/storage';
+  // Ensure the path doesn't start with / if baseUrl already has one
+  const cleanPath = path.replace(/^\/storage/, '').replace(/^\//, '');
   
-  return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
+  return `${baseUrl}/${cleanPath}`;
 };
 
 api.interceptors.request.use(async (config) => {

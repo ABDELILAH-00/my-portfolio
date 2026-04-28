@@ -40,10 +40,15 @@ export const AuthProvider = ({ children }) => {
     token,
     loading,
     login: async (email, password) => {
-      const res = await api.post('/login', { email, password });
-      localStorage.setItem('admin_token', res.data.token);
-      setToken(res.data.token);
-      setUser(res.data.user);
+      try {
+        const res = await api.post('/login', { email, password });
+        localStorage.setItem('admin_token', res.data.token);
+        setToken(res.data.token);
+        setUser(res.data.user);
+      } catch (err) {
+        console.error("AUTH_CONTEXT_LOGIN_ERROR:", err);
+        throw err;
+      }
     },
     logout: () => {
       localStorage.removeItem('admin_token');

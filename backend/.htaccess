@@ -1,5 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
+
+    # CORS Handling for InfinityFree
+    Header set Access-Control-Allow-Origin "https://abdelilahportfolio.netlify.app"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, X-ADMIN-KEY, X-SIGNATURE, X-TIMESTAMP, Authorization, X-Requested-With"
+    Header set Access-Control-Allow-Credentials "true"
+
+    # Handle OPTIONS requests early
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=204,L]
+
     # Redirect all requests to the public directory
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]

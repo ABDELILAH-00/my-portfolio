@@ -1,4 +1,16 @@
 <?php
+// --- CONFIGURATION CORS POUR INFINITYFREE ---
+header("Access-Control-Allow-Origin: https://abdelilahportfolio.netlify.app");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-ADMIN-KEY, X-SIGNATURE, X-TIMESTAMP, X-Requested-With, Accept");
+header("Access-Control-Allow-Credentials: true"); // INDISPENSABLE POUR LE COOKIE __TEST
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit();
+}
+// --------------------------------------------
+
 // CORS Handling for InfinityFree/Shared Hosting
 header("Access-Control-Allow-Origin: https://abdelilahportfolio.netlify.app");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");

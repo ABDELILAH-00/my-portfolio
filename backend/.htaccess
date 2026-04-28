@@ -1,17 +1,17 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine on
-
-    # CORS Handling for InfinityFree
+<IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "https://abdelilahportfolio.netlify.app"
-    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-    Header set Access-Control-Allow-Headers "Content-Type, X-ADMIN-KEY, X-SIGNATURE, X-TIMESTAMP, Authorization, X-Requested-With"
     Header set Access-Control-Allow-Credentials "true"
-
-    # Handle OPTIONS requests early
-    RewriteCond %{REQUEST_METHOD} OPTIONS
-    RewriteRule ^(.*)$ $1 [R=204,L]
-
-    # Redirect all requests to the public directory
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-ADMIN-KEY, X-SIGNATURE, X-TIMESTAMP, X-Requested-With, Accept"
 </IfModule>
+
+RewriteEngine On
+# Gérer les requêtes OPTIONS (Preflight)
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Reste de la configuration Laravel
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+

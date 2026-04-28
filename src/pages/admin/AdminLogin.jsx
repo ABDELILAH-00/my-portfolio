@@ -31,10 +31,10 @@ const AdminLogin = () => {
       await login(email, password);
       navigate('/admin');
     } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || 'Erreur inconnue';
-      console.error("DEBUG LOGIN:", err.response);
-      alert("ERREUR CONNEXION: " + errorMsg + "\n\nConsultez la console F12 pour plus de détails.");
-      setStatus({ message: errorMsg, type: 'error' });
+      setStatus({ 
+        message: err.response?.data?.message || 'Clé d\'accès invalide ou erreur réseau', 
+        type: 'error' 
+      });
     } finally {
       setLoading(false);
     }

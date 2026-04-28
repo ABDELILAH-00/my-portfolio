@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         setToken(res.data.token);
         setUser(res.data.user);
       } catch (err) {
-        console.error("AUTH_CONTEXT_LOGIN_ERROR:", err);
         throw err;
       }
     },

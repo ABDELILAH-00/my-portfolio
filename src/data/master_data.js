@@ -1,3 +1,29 @@
+export const MASTER_PROJECTS = [
+  {
+    id: 1,
+    title: "SGG Conges App",
+    description: "Projet web professionnel de gestion des congés, conçu pour optimiser le suivi, la validation et l'administration des demandes de congés au sein d'une organisation.",
+    category: "Full Stack",
+    technologies: ["Laravel", "React", "Tailwind CSS"],
+    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
+    github_url: "#",
+    live_url: "#"
+  },
+  {
+    id: 2,
+    title: "Abdel Music App",
+    description: "Une application de streaming musical moderne avec une interface utilisateur immersive, permettant la lecture, la gestion de playlists et la découverte d'artistes.",
+    category: "Front End",
+    technologies: ["React", "GSAP", "Framer Motion"],
+    thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2340&auto=format&fit=crop",
+    github_url: "#",
+    live_url: "#"
+  }
+];
 
-export const skillsData = [{"id":1,"name":"Javascript","icon_path":"javascript\/javascript-original.svg","category":"Main Tech","percentage":100,"sort_order":1,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":2,"name":"Typescript","icon_path":"typescript\/typescript-original.svg","category":"Main Tech","percentage":100,"sort_order":2,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":3,"name":"React","icon_path":"react\/react-original.svg","category":"Main Tech","percentage":100,"sort_order":3,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":4,"name":"PHP","icon_path":"php\/php-original.svg","category":"Main Tech","percentage":100,"sort_order":4,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":5,"name":"Laravel","icon_path":"laravel\/laravel-original.svg","category":"Main Tech","percentage":100,"sort_order":5,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":6,"name":"Tailwind","icon_path":"tailwindcss\/tailwindcss-original.svg","category":"Main Tech","percentage":100,"sort_order":6,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":7,"name":"Bootstrap","icon_path":"bootstrap\/bootstrap-original.svg","category":"Main Tech","percentage":100,"sort_order":7,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":8,"name":"Mysql","icon_path":"mysql\/mysql-original.svg","category":"Main Tech","percentage":100,"sort_order":8,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":9,"name":"MongoDB","icon_path":"mongodb\/mongodb-original.svg","category":"Main Tech","percentage":100,"sort_order":9,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":10,"name":"Git","icon_path":"git\/git-original.svg","category":"Main Tech","percentage":100,"sort_order":10,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"},{"id":11,"name":"GitHub","icon_path":"github\/github-original.svg","category":"Main Tech","percentage":100,"sort_order":11,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-20T00:05:42.000000Z"}];
-export const projectsData = [{"id":1,"title":"SGG Conges App","slug":"sgg-conges-app","category":"Full Stack","description":"Projet web professionnel de gestion des cong\u00e9s, con\u00e7u pour optimiser le suivi, la validation et l'administration des demandes de cong\u00e9 avec une interface moderne et une architecture performante.","tech_stack":["Laravel","React","Tailwind CSS","MySQL"],"github_url":"https:\/\/github.com\/ABDELILAH-00","live_url":"https:\/\/sgg-conges-abdelilah.wuaze.com\/login","thumbnail":"\/storage\/projects\/93043973-e3b4-4deb-87b0-a6c8c05b334b.webp","featured":true,"published":true,"sort_order":1,"created_at":"2026-04-20T00:05:42.000000Z","updated_at":"2026-04-27T20:24:48.000000Z","thumbnail_url":"http:\/\/127.0.0.1:8000\/storage\/projects\/93043973-e3b4-4deb-87b0-a6c8c05b334b.webp"}];
+export const MASTER_SKILLS = [
+  { id: 1, name: "React", level: 95, category: "Frontend", icon: "react" },
+  { id: 2, name: "Laravel", level: 90, category: "Backend", icon: "laravel" },
+  { id: 3, name: "Tailwind CSS", level: 95, category: "Design", icon: "tailwind" },
+  { id: 4, name: "JavaScript", level: 92, category: "Frontend", icon: "js" }
+];

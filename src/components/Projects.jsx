@@ -35,7 +35,7 @@ const EmptyIcon = () => (
   </svg>
 );
 
-const CATEGORIES = ['Tous', 'Full Stack', 'Frontend', 'Backend', 'Mobile'];
+import { MASTER_PROJECTS } from '../data/master_data';
 
 const Projects = () => {
   const [query, setQuery] = useState('');
@@ -44,18 +44,19 @@ const Projects = () => {
 
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Debounce search query to prevent constant re-rendering while typing
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 300);
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data: projects = projectsData, isLoading } = useQuery({
+  // Use MASTER_PROJECTS as the primary source for performance and reliability
+  const { data: projects = MASTER_PROJECTS } = useQuery({
     queryKey: ['projects'],
     queryFn: fetchProjects,
-    staleTime: 1000,
-    initialData: projectsData,
-    refetchInterval: 3000, // CHECK EVERY 3 SECONDS (REAL-TIME)
+    initialData: MASTER_PROJECTS,
+    retry: false,
+    enabled: false, // DISABLE API CALLS ON PRODUCTION TO STOP CORS ERRORS
+    staleTime: Infinity
   });
 
   const displayProjects = projects || [];

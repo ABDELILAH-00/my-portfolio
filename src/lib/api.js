@@ -1,33 +1,34 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // Use absolute URL for the API
-  baseURL: 'https://abdelilah-portfolio.wuaze.com/api',
-  withCredentials: true,
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
 });
 
-// Helper for assets: First check local public folder, then fallback to backend
+/**
+ * Build the public URL for a storage asset.
+ * Handles: Cloudinary URLs, local /storage/ paths, and relative paths.
+ */
 export const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
-  
-  // Clean the path
-  const cleanPath = path.replace(/^\/storage/, '').replace(/^\//, '');
-  
-  // Try to load from the backend directly in HTTPS
-  return `https://abdelilah-portfolio.wuaze.com/public/storage/${cleanPath}`;
+  if (path.startsWith('/storage')) return path;
+
+  const cleanPath = path.replace(/^\//, '');
+  return `/storage/${cleanPath}`;
 };
 
+// ─── Request interceptor: attach admin key + rewrite admin routes ───
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('admin_token');
   if (token) {
     config.headers['X-ADMIN-KEY'] = token;
   }
-  
+
+  // Rewrite /admin/* → /be3dol/*
   if (config.url && config.url.startsWith('/admin')) {
     config.url = config.url.replace('/admin', '/be3dol');
   }
@@ -39,8 +40,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// ─── Response interceptor: unwrap { status, data } envelope ─────────
 api.interceptors.response.use(
   (response) => {
+    // Unwrap Laravel's { status: 'success', data: ... } envelope
     if (response.data && response.data.status === 'success' && 'data' in response.data) {
       response.data = response.data.data;
     }

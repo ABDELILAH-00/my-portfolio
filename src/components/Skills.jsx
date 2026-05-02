@@ -2,21 +2,16 @@ import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import TypewriterText from './ui/TypewriterText';
-import { MASTER_SKILLS } from '../data/master_data';
 
 const Skills = () => {
   const [activeSkill, setActiveSkill] = useState(null);
 
-  const { data: techStack = MASTER_SKILLS } = useQuery({
+  const { data: techStack = [] } = useQuery({
     queryKey: ['skills-public'],
     queryFn: async () => {
       const { data } = await api.get('/skills');
-      return Array.isArray(data) ? data : data.data;
+      return Array.isArray(data) ? data : [];
     },
-    initialData: MASTER_SKILLS,
-    retry: false,
-    enabled: false, // DISABLE API CALLS ON PRODUCTION
-    staleTime: Infinity
   });
 
   const iconUrl = (path) => `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${path}`;

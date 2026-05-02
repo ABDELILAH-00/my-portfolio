@@ -65,16 +65,16 @@ const Hero = () => {
               <span>Voir les projets</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-[#4093DB]"></span>
             </a>
-            <button
-              onClick={async () => {
-                window.open('/cv.pdf', '_blank');
-              }}
+            <a
+              href="/cv-download"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900/80 hover:text-[#4093DB] transition-all relative group flex items-center gap-2 cursor-pointer"
             >
               <Download size={14} strokeWidth={2.5} />
               <span>Télécharger le CV</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-[#4093DB]"></span>
-            </button>
+            </a>
           </div>
 
           <div className="flex items-center gap-6 mt-2">

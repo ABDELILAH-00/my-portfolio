@@ -1,37 +1,11 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { Briefcase, Award, Users, Cpu } from 'lucide-react';
 import { gsap } from '../lib/gsap';
-import { useQuery } from '@tanstack/react-query';
-import api from '../lib/api';
 import TypewriterText from './ui/TypewriterText';
-import { skillsData, projectsData } from '../data/master_data';
 
 const About = () => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
-
-  // INSTANT DATA: Using baked-in data for 0ms load time
-  const { data: projects = projectsData } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const { data } = await api.get('/projects');
-      return Array.isArray(data) ? data : data.data;
-    },
-    staleTime: 1000,
-    initialData: projectsData,
-    refetchInterval: 3000
-  });
-
-  const { data: skills = skillsData } = useQuery({
-    queryKey: ['skills-public'],
-    queryFn: async () => {
-      const { data } = await api.get('/skills');
-      return Array.isArray(data) ? data : data.data;
-    },
-    staleTime: 1000,
-    initialData: skillsData,
-    refetchInterval: 3000
-  });
 
   const dynamicStats = useMemo(() => {
     return [

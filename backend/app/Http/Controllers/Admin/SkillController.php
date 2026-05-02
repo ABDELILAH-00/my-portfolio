@@ -10,16 +10,18 @@ class SkillController extends Controller
 {
     public function index()
     {
-        $skills = Skill::get();
+        $skills = Skill::orderBy('sort_order', 'asc')->get();
         return response()->json(['status' => 'success', 'data' => $skills]);
     }
-    
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'icon_path' => 'required|string',
             'category' => 'required|string',
+            'percentage' => 'nullable|integer|min:0|max:100',
+            'sort_order' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -31,23 +33,34 @@ class SkillController extends Controller
         }
 
         $skill = Skill::create($validator->validated());
-        Cache::forget('public_skills');
-        return response()->json(['status' => 'success', 'message' => 'Compétence créée avec succès', 'data' => $skill], 201);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compétence créée avec succès',
+            'data' => $skill
+        ], 201);
     }
 
     public function destroy($id)
     {
-        $skill = Skill::find($id);
-        if (!$skill) return response()->json(['status' => 'error', 'message' => 'Compétence non trouvée'], 404);
-
+        $skill = Skill::findOrFail($id);
         $skill->delete();
-        Cache::forget('public_skills');
+
         return response()->json(['status' => 'success', 'message' => 'Compétence supprimée avec succès']);
     }
 
     public function reorder(Request $request)
     {
-        Cache::forget('public_skills');
+        $request->validate([
+            'skills' => 'required|array',
+            'skills.*.id' => 'required|integer|exists:skills,id',
+            'skills.*.sort_order' => 'required|integer',
+        ]);
+
+        foreach ($request->skills as $item) {
+            Skill::where('id', $item['id'])->update(['sort_order' => $item['sort_order']]);
+        }
+
         return response()->json(['status' => 'success', 'message' => 'Compétences réordonnées avec succès']);
     }
 }

@@ -19,79 +19,85 @@ class ProjectController extends Controller
 
     public function show($id)
     {
-        $project = Project::find($id);
-        if (!$project) return response()->json(['status' => 'error', 'message' => 'Projet non trouvé'], 404);
+        $project = Project::findOrFail($id);
         return response()->json(['status' => 'success', 'data' => $project]);
     }
 
     public function store(StoreProjectRequest $request)
     {
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['title']);
-        $data['thumbnail'] = $this->handleImageUpload($request->input('thumbnail'));
-        
+        $data['slug'] = Str::slug($data['title']) . '-' . Str::random(4);
+
+        if ($request->filled('thumbnail')) {
+            $data['thumbnail'] = $this->handleImageUpload($request->input('thumbnail'));
+        }
+
         $project = Project::create($data);
-        Cache::forget('public_projects');
-        return response()->json(['status' => 'success', 'message' => 'Projet créé avec succès', 'data' => $project], 201);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Projet créé avec succès',
+            'data' => $project->fresh()
+        ], 201);
     }
 
     public function update(UpdateProjectRequest $request, $id)
     {
-        $project = Project::find($id);
-        if (!$project) return response()->json(['status' => 'error', 'message' => 'Projet non trouvé'], 404);
-
+        $project = Project::findOrFail($id);
         $data = $request->validated();
-        if (isset($data['title'])) $data['slug'] = Str::slug($data['title']);
 
-        if ($request->filled('thumbnail')) {
-            $newThumbnail = $this->handleImageUpload($request->input('thumbnail'), $project->thumbnail);
-            $data['thumbnail'] = $newThumbnail;
+        if (isset($data['title'])) {
+            $data['slug'] = Str::slug($data['title']) . '-' . Str::random(4);
+        }
+
+        if ($request->filled('thumbnail') && str_starts_with($request->input('thumbnail'), 'data:image')) {
+            $data['thumbnail'] = $this->handleImageUpload($request->input('thumbnail'), $project->thumbnail);
         }
 
         $project->update($data);
-        Cache::forget('public_projects');
-        return response()->json(['status' => 'success', 'message' => 'Projet mis à jour avec succès', 'data' => $project]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Projet mis à jour avec succès',
+            'data' => $project->fresh()
+        ]);
     }
 
     public function destroy($id)
     {
-        $project = Project::find($id);
-        if (!$project) return response()->json(['status' => 'error', 'message' => 'Projet non trouvé'], 404);
+        $project = Project::findOrFail($id);
 
-        if ($project->thumbnail) {
+        // Delete local thumbnail if it's not a URL
+        if ($project->thumbnail && !str_starts_with($project->thumbnail, 'http')) {
             Storage::disk('public')->delete($project->thumbnail);
         }
 
         $project->delete();
-        Cache::forget('public_projects');
+
         return response()->json(['status' => 'success', 'message' => 'Projet supprimé avec succès']);
     }
 
-    private function handleImageUpload($thumbnail, $oldThumbnail = null)
+    private function handleImageUpload(string $thumbnail, ?string $oldThumbnail = null): string
     {
-        if (!$thumbnail || !str_starts_with($thumbnail, 'data:image')) {
-            return $thumbnail; 
+        if (!str_starts_with($thumbnail, 'data:image')) {
+            return $thumbnail;
         }
 
-        if ($oldThumbnail) {
+        // Delete old file
+        if ($oldThumbnail && !str_starts_with($oldThumbnail, 'http')) {
             Storage::disk('public')->delete($oldThumbnail);
         }
 
-        @list($type, $file_data) = explode(';', $thumbnail);
-        @list(, $file_data) = explode(',', $file_data);
-        
-        $decodedData = base64_decode($file_data);
+        @list($type, $fileData) = explode(';', $thumbnail);
+        @list(, $fileData) = explode(',', $fileData);
+
+        $decodedData = base64_decode($fileData);
         if (!$decodedData) {
             abort(422, 'Données d\'image invalides.');
         }
 
-        if (strlen($decodedData) > 5242880) { // 5MB limit
+        if (strlen($decodedData) > 5242880) {
             abort(422, 'La taille de l\'image dépasse la limite de 5 Mo.');
-        }
-
-        $imageInfo = @getimagesizefromstring($decodedData);
-        if (!$imageInfo) {
-            abort(422, 'Contenu d\'image invalide.');
         }
 
         $imageName = (string) Str::uuid() . '.webp';

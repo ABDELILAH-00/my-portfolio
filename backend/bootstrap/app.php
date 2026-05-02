@@ -5,10 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\AdminKeyAuth;
 use App\Http\Middleware\SecurityHeaders;
-use App\Http\Middleware\RequestLoggingMiddleware;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,13 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // $middleware->append(RequestLoggingMiddleware::class);
         $middleware->append(SecurityHeaders::class);
-        
+
         $middleware->alias([
             'admin.key' => AdminKeyAuth::class,
         ]);
-        
+
         $middleware->validateCsrfTokens(except: [
             'api/*',
         ]);
@@ -34,18 +30,41 @@ return Application::configure(basePath: dirname(__DIR__))
             return $request->is('api/*') || $request->wantsJson();
         });
 
-        $exceptions->render(function (\Throwable $e, Request $request) {
-            if ($e instanceof \Illuminate\Validation\ValidationException) {
+        $exceptions->render(function (\Illuminate\Validation\ValidationException $e, Request $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Validation failed',
                     'errors' => $e->errors()
                 ], 422);
             }
+        });
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong'
-            ], 500);
+        $exceptions->render(function (\Illuminate\Database\Eloquent\ModelNotFoundException $e, Request $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Ressource non trouvée'
+                ], 404);
+            }
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Route non trouvée'
+                ], 404);
+            }
+        });
+
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
+                $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+                return response()->json([
+                    'status' => 'error',
+                    'message' => app()->isProduction() ? 'Something went wrong' : $e->getMessage()
+                ], $status);
+            }
         });
     })->create();

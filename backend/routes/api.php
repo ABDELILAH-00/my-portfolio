@@ -10,26 +10,44 @@ use App\Http\Controllers\Admin\SkillController as AdminSkillController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
-// Public Routes Closure
-$publicRoutes = function () {
-    Route::get('/projects', [ProjectController::class, 'index']);
-    Route::get('/skills', [SkillController::class, 'index']);
-    Route::post('/contact', [ContactController::class, 'store']);
-    Route::post('/be3dol/login', [AuthController::class, 'login']);
-    Route::post('/recover-password', [AuthController::class, 'recoverPassword']);
-};
+// ─── Health Check ────────────────────────────────────────────
+Route::get('/health', function () {
+    $dbOk = false;
+    try {
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $dbOk = true;
+    } catch (\Exception $e) {}
 
-// Admin Routes Closure
-$adminRoutes = function () {
+    return response()->json([
+        'status' => 'ok',
+        'db' => $dbOk ? 'connected' : 'error',
+        'cache' => config('cache.default'),
+        'storage' => config('filesystems.default'),
+        'queue' => config('queue.default'),
+        'timestamp' => now()->toIso8601String(),
+    ]);
+});
+
+// ─── Public Routes ───────────────────────────────────────────
+Route::get('/projects', [ProjectController::class, 'index']);
+Route::get('/skills', [SkillController::class, 'index']);
+Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/be3dol/login', [AuthController::class, 'login']);
+Route::post('/recover-password', [AuthController::class, 'recoverPassword']);
+
+// ─── Admin Routes (protected) ───────────────────────────────
+Route::middleware(['admin.key', 'throttle:60,1'])->prefix('be3dol')->group(function () {
+    // Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'index']);
-    // Projects
+
+    // Projects CRUD
     Route::get('projects', [AdminProjectController::class, 'index']);
     Route::post('projects', [AdminProjectController::class, 'store']);
+    Route::get('projects/{id}', [AdminProjectController::class, 'show']);
     Route::put('projects/{id}', [AdminProjectController::class, 'update']);
     Route::delete('projects/{id}', [AdminProjectController::class, 'destroy']);
-    Route::get('projects/{id}', [AdminProjectController::class, 'show']);
 
-    // Skills
+    // Skills CRUD
     Route::get('skills', [AdminSkillController::class, 'index']);
     Route::post('skills', [AdminSkillController::class, 'store']);
     Route::delete('skills/{id}', [AdminSkillController::class, 'destroy']);
@@ -40,20 +58,8 @@ $adminRoutes = function () {
     Route::patch('contacts/{id}/read', [AdminContactController::class, 'markAsRead']);
     Route::delete('contacts/{id}', [AdminContactController::class, 'destroy']);
 
-    // Auth & Identity
+    // Auth & Profile
     Route::get('/user', [AuthController::class, 'user']);
     Route::patch('/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword']);
     Route::patch('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'updateProfile']);
-};
-
-// --- BASE API ---
-$publicRoutes();
-Route::middleware(['admin.key', 'throttle:30,1'])->prefix('be3dol')->group($adminRoutes);
-Route::middleware(['admin.key', 'throttle:30,1'])->prefix('x9f7-admin-core')->group($adminRoutes);
-
-// --- V1 API ---
-Route::prefix('v1')->group(function () use ($publicRoutes, $adminRoutes) {
-    $publicRoutes();
-    Route::middleware(['admin.key', 'throttle:30,1'])->prefix('be3dol')->group($adminRoutes);
-    Route::middleware(['admin.key', 'throttle:30,1'])->prefix('x9f7-admin-core')->group($adminRoutes);
 });

@@ -6,20 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'category', 'description', 
-        'github_url', 'live_url', 'tech_stack', 'thumbnail', 
+        'title', 'slug', 'category', 'description',
+        'github_url', 'live_url', 'tech_stack', 'thumbnail',
         'featured', 'published', 'sort_order'
     ];
-
-    protected static function booted()
-    {
-        static::saved(function () {
-            \App\Utils\DataBaker::bake();
-        });
-        static::deleted(function () {
-            \App\Utils\DataBaker::bake();
-        });
-    }
 
     protected $casts = [
         'tech_stack' => 'array',
@@ -30,16 +20,20 @@ class Project extends Model
 
     protected $appends = ['thumbnail_url'];
 
-    public function getThumbnailUrlAttribute()
+    public function getThumbnailUrlAttribute(): ?string
     {
         if (!$this->thumbnail) return null;
-        
-        // Handle legacy paths that already have /storage/
-        if (str_starts_with($this->thumbnail, '/storage')) {
-            return url($this->thumbnail);
+
+        // External URLs (Cloudinary, Unsplash, etc.): return as-is
+        if (str_starts_with($this->thumbnail, 'http')) {
+            return $this->thumbnail;
         }
-        
-        // New relative path approach
-        return asset('storage/' . $this->thumbnail);
+
+        // Local storage path
+        if (str_starts_with($this->thumbnail, '/storage')) {
+            return $this->thumbnail;
+        }
+
+        return '/storage/' . $this->thumbnail;
     }
 }

@@ -9,8 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
             $table->string('title');
             $table->string('slug')->unique()->index();
@@ -27,8 +25,6 @@ return new class extends Migration
         });
 
         Schema::create('skills', function (Blueprint $table) {
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
             $table->string('name');
             $table->string('icon_path');
@@ -39,8 +35,6 @@ return new class extends Migration
         });
 
         Schema::create('contacts', function (Blueprint $table) {
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
             $table->string('name');
             $table->string('email');
@@ -53,8 +47,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('projects');
-        Schema::dropIfExists('skills');
         Schema::dropIfExists('contacts');
+        Schema::dropIfExists('skills');
+        Schema::dropIfExists('projects');
     }
 };

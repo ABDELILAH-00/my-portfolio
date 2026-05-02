@@ -1,0 +1,50 @@
+services:
+  # Backend API (Laravel)
+  - type: web
+    name: portfolio-backend
+    env: php
+    plan: free
+    buildCommand: "cd backend && composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    startCommand: "cd backend && php artisan serve --host=0.0.0.0 --port=$PORT"
+    envVars:
+      - key: APP_NAME
+        value: "Abdelilah Amalas Portfolio"
+      - key: APP_ENV
+        value: "production"
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: "https://portfolio-backend.onrender.com"
+      - key: FRONTEND_URL
+        value: "https://portfolio-frontend.onrender.com"
+      - key: ADMIN_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: "admin@example.com"
+      - key: ADMIN_MATRICULE
+        value: "0000"
+      - key: DB_CONNECTION
+        value: "pgsql"
+      - key: DATABASE_URL
+        sync: false # Add your Neon Database URL here manually in the Render dashboard
+      - key: CLOUDINARY_URL
+        sync: false # Add your Cloudinary URL here manually
+      - key: CACHE_STORE
+        value: "file"
+      - key: SESSION_DRIVER
+        value: "file"
+      - key: QUEUE_CONNECTION
+        value: "sync"
+
+  # Frontend (React/Vite)
+  - type: web
+    name: portfolio-frontend
+    env: static
+    plan: free
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "./dist"
+    envVars:
+      - key: VITE_API_URL
+        value: "https://portfolio-backend.onrender.com/api"

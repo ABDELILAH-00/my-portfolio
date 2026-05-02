@@ -35,6 +35,7 @@ class PortfolioSeeder extends Seeder
             'tech_stack' => ['Laravel', 'React', 'Tailwind CSS', 'MySQL'],
             'featured' => true,
             'published' => true,
+            'thumbnail' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop',
             'sort_order' => 1,
         ]);
     }

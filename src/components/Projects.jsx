@@ -5,13 +5,7 @@ import ProjectCard from './ui/ProjectCard';
 
 const fetchProjects = async () => {
   const { data } = await api.get('/projects');
-  // Laravel returns the array directly or inside a data property depending on your resource collection
-  return Array.isArray(data) ? data : data.data;
-};
-
-const fetchSkills = async () => {
-  const { data } = await api.get('/skills');
-  return Array.isArray(data) ? data : data.data;
+  return Array.isArray(data) ? data : [];
 };
 
 // Local SVG icons to avoid lucide-react version issues
@@ -34,7 +28,7 @@ const EmptyIcon = () => (
   </svg>
 );
 
-import { MASTER_PROJECTS } from '../data/master_data';
+const CATEGORIES = ['Tous', 'Full Stack', 'Frontend', 'Backend', 'Mobile'];
 
 const Projects = () => {
   const [query, setQuery] = useState('');
@@ -43,19 +37,15 @@ const Projects = () => {
 
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
+  // Debounce search query
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 300);
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Use MASTER_PROJECTS as the primary source for performance and reliability
-  const { data: projects = MASTER_PROJECTS } = useQuery({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: fetchProjects,
-    initialData: MASTER_PROJECTS,
-    retry: false,
-    enabled: false, // DISABLE API CALLS ON PRODUCTION TO STOP CORS ERRORS
-    staleTime: Infinity
   });
 
   const displayProjects = projects || [];

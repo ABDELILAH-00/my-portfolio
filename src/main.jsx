@@ -7,11 +7,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,  // Do not spam backend upon tab switch
+      refetchOnWindowFocus: true,
       refetchOnReconnect: true,
       refetchOnMount: true,
-      staleTime: 1000 * 60 * 5,     // Cache integrity locked to 5 minutes
-      gcTime: 10 * 60 * 1000,
+      staleTime: 0,
+      gcTime: 5 * 60 * 1000,
       retry: 1,
     },
   },
@@ -24,4 +24,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </QueryClientProvider>
   </React.StrictMode>,
 )
-

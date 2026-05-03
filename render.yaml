@@ -1,11 +1,11 @@
 services:
-  # Backend API (Laravel)
+  # Backend API (Laravel via Docker)
   - type: web
     name: portfolio-backend
-    env: php
+    env: docker # Use Docker for Laravel
     plan: free
-    buildCommand: "cd backend && composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache"
-    startCommand: "cd backend && php artisan serve --host=0.0.0.0 --port=$PORT"
+    dockerContext: ./backend
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_NAME
         value: "Abdelilah Amalas Portfolio"
@@ -28,9 +28,9 @@ services:
       - key: DB_CONNECTION
         value: "pgsql"
       - key: DATABASE_URL
-        sync: false # Add your Neon Database URL here manually in the Render dashboard
+        sync: false
       - key: CLOUDINARY_URL
-        sync: false # Add your Cloudinary URL here manually
+        sync: false
       - key: CACHE_STORE
         value: "file"
       - key: SESSION_DRIVER
@@ -38,10 +38,10 @@ services:
       - key: QUEUE_CONNECTION
         value: "sync"
 
-  # Frontend (React/Vite)
+  # Frontend (React/Vite - Static Site)
   - type: web
     name: portfolio-frontend
-    env: static
+    env: static # Valid for static sites
     plan: free
     buildCommand: "npm install && npm run build"
     staticPublishPath: "./dist"

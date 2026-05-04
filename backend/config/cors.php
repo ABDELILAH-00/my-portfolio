@@ -10,9 +10,10 @@ return [
     ]),
 
     'allowed_origins_patterns' => [
-        // Allow any Render or Netlify subdomain
+        // Allow any Render, Netlify, or Vercel subdomain
         '/^https:\/\/.*\.onrender\.com$/',
         '/^https:\/\/.*\.netlify\.app$/',
+        '/^https:\/\/.*\.vercel\.app$/',
     ],
 
     'allowed_headers' => ['*'],

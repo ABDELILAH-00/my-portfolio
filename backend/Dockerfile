@@ -39,5 +39,5 @@ COPY nginx.conf /etc/nginx/sites-available/default
 # Expose port 80
 EXPOSE 80
 
-# Start nginx and php-fpm
-CMD service nginx start && php-fpm
+# Start nginx and php-fpm (dynamic port binding for Railway/Render)
+CMD sed -i "s/listen 80;/listen ${PORT:-80};/g" /etc/nginx/sites-available/default && service nginx start && php-fpm

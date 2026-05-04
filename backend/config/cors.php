@@ -5,16 +5,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => array_filter([
-        env('FRONTEND_URL', 'http://localhost:5173'),
-    ]),
+    'allowed_origins' => ['*'],
 
-    'allowed_origins_patterns' => [
-        // Allow any Render, Netlify, or Vercel subdomain
-        '/^https:\/\/.*\.onrender\.com$/',
-        '/^https:\/\/.*\.netlify\.app$/',
-        '/^https:\/\/.*\.vercel\.app$/',
-    ],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 

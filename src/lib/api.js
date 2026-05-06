@@ -15,10 +15,16 @@ const api = axios.create({
 export const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
-  if (path.startsWith('/storage')) return path;
+
+  // Extract base URL from VITE_API_URL by removing /api
+  const apiUrl = import.meta.env.VITE_API_URL || '';
+  const baseUrl = apiUrl.replace(/\/api$/, '');
 
   const cleanPath = path.replace(/^\//, '');
-  return `/storage/${cleanPath}`;
+  // If it's already a full storage path, strip it to avoid /storage/storage/
+  const finalPath = cleanPath.startsWith('storage/') ? cleanPath.replace('storage/', '') : cleanPath;
+  
+  return `${baseUrl}/storage/${finalPath}`;
 };
 
 // ─── Request interceptor: attach admin key + rewrite admin routes ───

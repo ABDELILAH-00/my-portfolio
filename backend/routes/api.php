@@ -13,14 +13,25 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 // ─── Health Check ────────────────────────────────────────────
 Route::get('/health', function () {
     $dbOk = false;
+    $errorMsg = null;
+    $tables = [];
+    $dbName = null;
+    
     try {
         \Illuminate\Support\Facades\DB::connection()->getPdo();
         $dbOk = true;
-    } catch (\Exception $e) {}
+        $dbName = \Illuminate\Support\Facades\DB::connection()->getDatabaseName();
+        $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
+    } catch (\Exception $e) {
+        $errorMsg = $e->getMessage();
+    }
 
     return response()->json([
         'status' => 'ok',
         'db' => $dbOk ? 'connected' : 'error',
+        'db_name' => $dbName,
+        'db_error' => $errorMsg,
+        'tables' => $tables,
         'cache' => config('cache.default'),
         'storage' => config('filesystems.default'),
         'queue' => config('queue.default'),

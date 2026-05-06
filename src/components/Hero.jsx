@@ -66,7 +66,8 @@ const Hero = () => {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-[#4093DB]"></span>
             </a>
             <a
-              href="/cv-download"
+              href="/ABDELILAH_AMALAS_CV.pdf"
+              download="ABDELILAH_AMALAS_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900/80 hover:text-[#4093DB] transition-all relative group flex items-center gap-2 cursor-pointer"

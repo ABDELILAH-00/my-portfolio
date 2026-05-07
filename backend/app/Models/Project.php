@@ -24,8 +24,8 @@ class Project extends Model
     {
         if (!$this->thumbnail) return null;
 
-        // External URLs (Cloudinary, Unsplash, etc.): return as-is
-        if (str_starts_with($this->thumbnail, 'http')) {
+        // External URLs (Cloudinary, Unsplash, etc.) or Base64 data: return as-is
+        if (str_starts_with($this->thumbnail, 'http') || str_starts_with($this->thumbnail, 'data:')) {
             return $this->thumbnail;
         }
 

@@ -11,17 +11,7 @@ const Footer = () => {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => {
-              const start = window.scrollY;
-              const duration = 6000;
-              let startTime = null;
-              const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-              const step = (time) => {
-                if (!startTime) startTime = time;
-                const progress = Math.min((time - startTime) / duration, 1);
-                window.scrollTo(0, start * (1 - ease(progress)));
-                if (progress < 1) requestAnimationFrame(step);
-              };
-              requestAnimationFrame(step);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
             aria-label="Scroll to top"

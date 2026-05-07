@@ -113,20 +113,7 @@ const Hero = () => {
       <div className="absolute top-[280px] right-8 md:top-auto md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
-            const target = document.documentElement.scrollHeight;
-            const start = window.scrollY;
-            const duration = 6000;
-            let startTime = null;
-
-            const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-            const step = (time) => {
-              if (!startTime) startTime = time;
-              const progress = Math.min((time - startTime) / duration, 1);
-              window.scrollTo(0, start + (target - start) * ease(progress));
-              if (progress < 1) requestAnimationFrame(step);
-            };
-            requestAnimationFrame(step);
+            document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
           }}
           className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
           aria-label="Scroll down to services"

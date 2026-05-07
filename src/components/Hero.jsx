@@ -2,7 +2,10 @@ import React from 'react';
 import { Mail, Download, ArrowRight } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon } from './ui/Icons';
 import TypewriterText from './ui/TypewriterText';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
+gsap.registerPlugin(ScrollToPlugin);
 const Hero = () => {
   const [currentText, setCurrentText] = React.useState("");
   const fullText = "Développeur Full Stack";
@@ -113,26 +116,11 @@ const Hero = () => {
       <div className="absolute top-[280px] right-8 md:top-auto md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
-            const target = document.documentElement.scrollHeight - window.innerHeight;
-            const start = window.scrollY;
-            const duration = 5000; // 5 seconds for a professional, smooth tour
-            let startTime = null;
-
-            // Sine easing: much smoother velocity curve than cubic, prevents middle-scroll lag
-            const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
-
-            const step = (time) => {
-              if (!startTime) startTime = time;
-              const progress = Math.min((time - startTime) / duration, 1);
-              
-              // Use scrollTo without causing layout thrashing
-              window.scroll(0, start + (target - start) * easeInOutSine(progress));
-              
-              if (progress < 1) {
-                requestAnimationFrame(step);
-              }
-            };
-            requestAnimationFrame(step);
+            gsap.to(window, {
+              duration: 5,
+              scrollTo: { y: "max" },
+              ease: "power1.inOut"
+            });
           }}
           className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
           aria-label="Scroll down to services"

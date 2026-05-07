@@ -1,5 +1,8 @@
 import React from 'react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
+gsap.registerPlugin(ScrollToPlugin);
 const Footer = () => {
   const year = new Date().getFullYear();
 
@@ -11,25 +14,11 @@ const Footer = () => {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => {
-              const start = window.scrollY;
-              const duration = 5000; // 5 seconds for a professional, smooth tour
-              let startTime = null;
-
-              // Sine easing: much smoother velocity curve than cubic, prevents middle-scroll lag
-              const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
-
-              const step = (time) => {
-                if (!startTime) startTime = time;
-                const progress = Math.min((time - startTime) / duration, 1);
-                
-                // Use scroll without causing layout thrashing
-                window.scroll(0, start * (1 - easeInOutSine(progress)));
-                
-                if (progress < 1) {
-                  requestAnimationFrame(step);
-                }
-              };
-              requestAnimationFrame(step);
+              gsap.to(window, {
+                duration: 5,
+                scrollTo: { y: 0 },
+                ease: "power1.inOut"
+              });
             }}
             className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
             aria-label="Scroll to top"

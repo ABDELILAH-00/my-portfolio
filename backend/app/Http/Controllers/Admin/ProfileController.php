@@ -26,31 +26,48 @@ class ProfileController extends Controller
             ], 422);
         }
 
-        $currentKey = config('admin.secret_key');
+        $currentPassword = $request->current_password;
+        $isValidCurrent = false;
 
-        if (!$request->current_password || !is_string($currentKey) || !is_string($request->current_password) || !hash_equals($currentKey, $request->current_password)) {
+        // 1. Check against database
+        $user = \App\Models\User::first();
+        if ($user && \Illuminate\Support\Facades\Hash::check($currentPassword, $user->password)) {
+            $isValidCurrent = true;
+        }
+
+        // 2. Check against env secret key
+        $currentKey = config('admin.secret_key');
+        if (!$isValidCurrent && is_string($currentKey) && hash_equals($currentKey, $currentPassword)) {
+            $isValidCurrent = true;
+        }
+
+        if (!$isValidCurrent) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'La clé d\'accès actuelle est incorrecte.'
+                'message' => 'Le mot de passe actuel est incorrect.'
             ], 422);
         }
 
-        $newKey = $request->password;
+        try {
+            if (!$user) {
+                $user = new \App\Models\User();
+                $user->name = 'Administrateur';
+                $user->email = config('admin.email', 'admin@example.com');
+            }
+            $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+            $user->save();
 
-        if ($this->updateEnv('ADMIN_SECRET_KEY', $newKey)) {
-            // We don't call config:clear here because it can cause timeouts (502) on slow disks.
-            // The user will just need to use the new key for future logins.
             return response()->json([
                 'status' => 'success',
-                'message' => 'La clé d\'accès administrative a été modifiée avec succès.',
-                'token' => $newKey
+                'message' => 'Mot de passe modifié avec succès.',
+                'token' => $request->password // Send back the new token for the frontend to update localstorage
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur système: ' . $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Erreur système : Impossible d\'écrire la configuration.'
-        ], 500);
     }
 
     /**

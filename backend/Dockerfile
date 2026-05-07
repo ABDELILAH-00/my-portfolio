@@ -33,6 +33,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
+# Create storage symlink
+RUN php artisan storage:link
+
 # Copy nginx config (we will create this in the next step)
 COPY nginx.conf /etc/nginx/sites-available/default
 

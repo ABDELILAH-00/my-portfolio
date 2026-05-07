@@ -7,24 +7,38 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $key = $request->input('password'); // We'll treat the password field as the access key
-        $secret = config('admin.secret_key');
-
-        if (!$key || !is_string($secret) || !is_string($key) || !hash_equals($secret, $key)) {
+        $password = $request->input('password');
+        
+        // 1. Try checking the database first (if password was changed)
+        $user = \App\Models\User::first();
+        if ($user && \Illuminate\Support\Facades\Hash::check($password, $user->password)) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Clé d\'accès invalide'
-            ], 401);
+                'status' => 'success',
+                'token' => 'admin-token',
+                'user' => [
+                    'name' => 'Administrateur',
+                    'role' => 'propriétaire'
+                ]
+            ]);
+        }
+
+        // 2. Fallback to the environment secret key (initial state)
+        $secret = config('admin.secret_key');
+        if ($secret && $password && hash_equals($secret, $password)) {
+            return response()->json([
+                'status' => 'success',
+                'token' => 'admin-token',
+                'user' => [
+                    'name' => 'Administrateur',
+                    'role' => 'propriétaire'
+                ]
+            ]);
         }
 
         return response()->json([
-            'status' => 'success',
-            'token' => $secret,
-            'user' => [
-                'name' => 'Administrateur',
-                'role' => 'propriétaire'
-            ]
-        ]);
+            'status' => 'error',
+            'message' => 'Clé d\'accès invalide'
+        ], 401);
     }
 
     public function user()
@@ -53,23 +67,25 @@ class AuthController extends Controller
             ], 403);
         }
 
-        $newKey = $request->password;
-        
-        // Update .env file
-        $path = base_path('.env');
-        if (file_exists($path)) {
-            $content = file_get_contents($path);
-            $oldKey = config('admin.secret_key');
-            $content = str_replace("ADMIN_SECRET_KEY=$oldKey", "ADMIN_SECRET_KEY=$newKey", $content);
-            file_put_contents($path, $content);
-            
-            // Clear config cache to apply changes immediately in production
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
-        }
+        try {
+            $user = \App\Models\User::first();
+            if (!$user) {
+                $user = new \App\Models\User();
+                $user->name = 'Administrateur';
+                $user->email = $adminEmail;
+            }
+            $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+            $user->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Mot de passe mis à jour avec succès'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Mot de passe mis à jour avec succès'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur lors de la mise à jour: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

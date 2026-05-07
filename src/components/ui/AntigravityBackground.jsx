@@ -9,6 +9,10 @@ const GlowBackground = () => {
   const dot2Ref = useRef(null);
 
   useEffect(() => {
+    // Disable heavy animations on mobile devices to prevent lag
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
     let animationFrameId;
     let time = 0;
 
@@ -86,24 +90,22 @@ const GlowBackground = () => {
       {/* Center Interactive Orb (Warm Pink/Peach) */}
       <div 
         ref={cursorOrbRef}
-        className="absolute top-0 left-0 rounded-full mix-blend-multiply opacity-50"
+        className="absolute top-0 left-0 rounded-full md:mix-blend-multiply opacity-30 md:opacity-50 blur-[30px] md:blur-[80px]"
         style={{ 
           width: '600px', 
           height: '600px', 
           background: 'radial-gradient(circle, rgba(255,182,193,0.8) 0%, rgba(255,182,193,0) 70%)',
-          filter: 'blur(80px)',
           willChange: 'transform'
         }}
       />
 
       {/* Top Right Static/Floating Orb (Soft Lavender/Purple) */}
       <div 
-        className="absolute top-[-10%] right-[-5%] rounded-full mix-blend-multiply opacity-60"
+        className="absolute top-[-10%] right-[-5%] rounded-full md:mix-blend-multiply opacity-30 md:opacity-60 blur-[30px] md:blur-[90px]"
         style={{ 
           width: '700px', 
           height: '700px', 
           background: 'radial-gradient(circle, rgba(216,180,254,0.6) 0%, rgba(216,180,254,0) 70%)',
-          filter: 'blur(90px)',
         }}
       >
         <div ref={blob1Ref} className="w-full h-full" />
@@ -111,12 +113,11 @@ const GlowBackground = () => {
 
       {/* Bottom Left Static/Floating Orb (Soft Teal/Cyan) */}
       <div 
-        className="absolute bottom-[-10%] left-[-10%] rounded-full mix-blend-multiply opacity-50"
+        className="absolute bottom-[-10%] left-[-10%] rounded-full md:mix-blend-multiply opacity-30 md:opacity-50 blur-[30px] md:blur-[90px]"
         style={{ 
           width: '600px', 
           height: '600px', 
           background: 'radial-gradient(circle, rgba(153,246,228,0.6) 0%, rgba(153,246,228,0) 70%)',
-          filter: 'blur(90px)',
         }}
       >
         <div ref={blob2Ref} className="w-full h-full" />

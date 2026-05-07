@@ -43,4 +43,4 @@ COPY nginx.conf /etc/nginx/sites-available/default
 EXPOSE 80
 
 # Start nginx and php-fpm (dynamic port binding for Railway/Render)
-CMD sed -i "s/listen 80;/listen ${PORT:-80};/g" /etc/nginx/sites-available/default && php artisan config:clear && service nginx start && php-fpm
+CMD sed -i "s/listen 80;/listen ${PORT:-80};/g" /etc/nginx/sites-available/default && php artisan config:clear && php artisan migrate --force && service nginx start && php-fpm

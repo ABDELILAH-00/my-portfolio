@@ -83,26 +83,8 @@ class ProjectController extends Controller
             return $thumbnail;
         }
 
-        // Delete old file
-        if ($oldThumbnail && !str_starts_with($oldThumbnail, 'http')) {
-            Storage::disk('public')->delete($oldThumbnail);
-        }
-
-        @list($type, $fileData) = explode(';', $thumbnail);
-        @list(, $fileData) = explode(',', $fileData);
-
-        $decodedData = base64_decode($fileData);
-        if (!$decodedData) {
-            abort(422, 'Données d\'image invalides.');
-        }
-
-        if (strlen($decodedData) > 5242880) {
-            abort(422, 'La taille de l\'image dépasse la limite de 5 Mo.');
-        }
-
-        $imageName = (string) Str::uuid() . '.webp';
-        Storage::disk('public')->put('projects/' . $imageName, $decodedData);
-
-        return 'projects/' . $imageName;
+        // Just return the base64 string directly so it is saved in the database.
+        // This is the most bulletproof solution for ephemeral Docker environments.
+        return $thumbnail;
     }
 }

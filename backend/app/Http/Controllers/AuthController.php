@@ -14,7 +14,7 @@ class AuthController extends Controller
         if ($user && \Illuminate\Support\Facades\Hash::check($password, $user->password)) {
             return response()->json([
                 'status' => 'success',
-                'token' => 'admin-token',
+                'token' => $password,
                 'user' => [
                     'name' => 'Administrateur',
                     'role' => 'propriétaire'
@@ -27,7 +27,7 @@ class AuthController extends Controller
         if ($secret && $password && hash_equals($secret, $password)) {
             return response()->json([
                 'status' => 'success',
-                'token' => 'admin-token',
+                'token' => $password,
                 'user' => [
                     'name' => 'Administrateur',
                     'role' => 'propriétaire'

@@ -45,8 +45,7 @@ const Hero = () => {
         <div className="order-2 flex flex-col items-center text-center md:items-start md:text-left md:order-1 md:col-span-8 pointer-events-auto">
 
           <h1 className="mb-3 text-2xl font-black tracking-tight sm:text-3xl md:text-5xl leading-[1.1] flex flex-wrap items-center justify-center md:justify-start min-h-[1.1em]">
-            <span className="text-[#4093DB]">Je suis </span>
-            <span className="text-[#000000] ml-2 flex items-center">
+            <span className="text-[#000000] flex items-center">
               {currentText}
               <span className="inline-block w-[3px] h-[0.8em] bg-[#4093DB] ml-1 animate-pulse" />
             </span>
@@ -113,7 +112,18 @@ const Hero = () => {
       <div className="absolute top-[280px] right-8 md:top-auto md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
-            document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+            const target = document.documentElement.scrollHeight - window.innerHeight;
+            const start = window.scrollY;
+            const duration = 3000;
+            let startTime = null;
+            const ease = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            const step = (time) => {
+              if (!startTime) startTime = time;
+              const progress = Math.min((time - startTime) / duration, 1);
+              window.scrollTo(0, start + (target - start) * ease(progress));
+              if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
           }}
           className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
           aria-label="Scroll down to services"

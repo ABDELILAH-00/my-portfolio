@@ -39,7 +39,7 @@ const Skills = () => {
             <TypewriterText text="Mes" speed={100} />
           </h2>
           <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black tracking-tighter leading-[0.8]">
-            <TypewriterText text="Technologies" speed={100} delay={800} />
+            <TypewriterText text="Compétences" speed={100} delay={800} />
           </h3>
         </div>
 

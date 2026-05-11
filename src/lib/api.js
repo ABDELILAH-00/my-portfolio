@@ -56,12 +56,6 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('admin_token');
-      if (window.location.pathname.startsWith('/admin')) {
-        window.location.href = '/be3dol/admin';
-      }
-    }
     return Promise.reject(error);
   }
 );

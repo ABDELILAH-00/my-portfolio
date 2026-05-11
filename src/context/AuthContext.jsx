@@ -1,64 +1,58 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import api from '../lib/api';
 
 const AuthContext = createContext({
   user: null,
   token: null,
-  loading: true,
+  loading: false,
   login: () => {},
   logout: () => {},
   updateToken: () => {}
 });
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('admin_token'));
-  const [loading, setLoading] = useState(true);
+  // Initialize from localStorage - if token exists, user is logged in
+  const [token, setToken] = useState(() => localStorage.getItem('admin_token'));
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('admin_user');
+    if (saved) {
+      try { return JSON.parse(saved); } catch { return null; }
+    }
+    return null;
+  });
+  // No loading state needed - localStorage is synchronous
+  const [loading] = useState(false);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      if (token && !user) {
-        try {
-          const res = await api.get('/admin/user');
-          setUser(res.data);
-        } catch (error) {
-          localStorage.removeItem('admin_token');
-          setToken(null);
-          setUser(null);
-        }
-      } else if (!token) {
-        setUser(null);
-      }
-      setLoading(false);
-    };
+  const login = useCallback(async (email, password) => {
+    const res = await api.post('/login', { email, password });
+    const newToken = res.data.token;
+    const newUser = res.data.user;
+    localStorage.setItem('admin_token', newToken);
+    localStorage.setItem('admin_user', JSON.stringify(newUser));
+    setToken(newToken);
+    setUser(newUser);
+  }, []);
 
-    checkAuth();
-  }, [token]);
+  const logout = useCallback(() => {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    setToken(null);
+    setUser(null);
+  }, []);
+
+  const updateToken = useCallback((newToken) => {
+    localStorage.setItem('admin_token', newToken);
+    setToken(newToken);
+  }, []);
 
   const authValue = useMemo(() => ({
     user,
     token,
     loading,
-    login: async (email, password) => {
-      try {
-        const res = await api.post('/login', { email, password });
-        localStorage.setItem('admin_token', res.data.token);
-        setToken(res.data.token);
-        setUser(res.data.user);
-      } catch (err) {
-        throw err;
-      }
-    },
-    logout: () => {
-      localStorage.removeItem('admin_token');
-      setToken(null);
-      setUser(null);
-    },
-    updateToken: (newToken) => {
-      localStorage.setItem('admin_token', newToken);
-      setToken(newToken);
-    }
-  }), [user, token, loading]);
+    login,
+    logout,
+    updateToken
+  }), [user, token, loading, login, logout, updateToken]);
 
   return (
     <AuthContext.Provider value={authValue}>

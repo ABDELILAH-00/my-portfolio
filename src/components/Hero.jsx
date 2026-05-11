@@ -2,10 +2,7 @@ import React from 'react';
 import { Mail, Download, ArrowRight } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon } from './ui/Icons';
 import TypewriterText from './ui/TypewriterText';
-import gsap from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-gsap.registerPlugin(ScrollToPlugin);
 const Hero = () => {
   const [currentText, setCurrentText] = React.useState("");
   const fullText = "Développeur Full Stack";
@@ -116,11 +113,7 @@ const Hero = () => {
       <div className="absolute top-[280px] right-8 md:top-auto md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex justify-center z-20">
         <button
           onClick={() => {
-            gsap.to(window, {
-              duration: 5,
-              scrollTo: { y: "max" },
-              ease: "power1.inOut"
-            });
+            document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
           }}
           className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
           aria-label="Scroll down to services"

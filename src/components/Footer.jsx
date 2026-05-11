@@ -1,8 +1,5 @@
 import React from 'react';
-import gsap from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-gsap.registerPlugin(ScrollToPlugin);
 const Footer = () => {
   const year = new Date().getFullYear();
 
@@ -14,11 +11,7 @@ const Footer = () => {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => {
-              gsap.to(window, {
-                duration: 5,
-                scrollTo: { y: 0 },
-                ease: "power1.inOut"
-              });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="w-11 h-11 rounded-full bg-transparent border border-[#4093DB]/40 flex items-center justify-center text-[#4093DB] hover:bg-[#4093DB] hover:text-white transition-all cursor-pointer animate-float"
             aria-label="Scroll to top"

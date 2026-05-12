@@ -34,11 +34,11 @@ const Skills = () => {
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center md:items-start lg:flex-row gap-8 lg:gap-24">
 
         {/* Left Header - Matching screenshots */}
-        <div className="flex-shrink-0 lg:w-1/3 pt-4 text-center lg:text-left select-none">
+        <div className="flex-shrink-0 lg:w-1/3 pt-4 text-center lg:text-left select-none pr-4">
           <h2 className="text-[#4093DB] text-4xl md:text-5xl font-['Caveat',cursive] leading-none mb-0 -rotate-3 w-fit mx-auto lg:mx-0">
             <TypewriterText text="Mes" speed={100} />
           </h2>
-          <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black tracking-tighter leading-[0.8]">
+          <h3 className="text-4xl sm:text-5xl md:text-6xl font-black text-black tracking-tighter leading-[0.8]">
             <TypewriterText text="Compétences" speed={100} delay={800} />
           </h3>
         </div>

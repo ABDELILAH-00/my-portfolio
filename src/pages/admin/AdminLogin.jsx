@@ -6,6 +6,16 @@ import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import Toast from '../../components/ui/Toast';
 
 const AdminLogin = () => {
+  const { token, login } = useAuth();
+  const navigate = useNavigate();
+
+  // If already logged in, redirect to dashboard
+  React.useEffect(() => {
+    if (token) {
+      navigate('/admin', { replace: true });
+    }
+  }, [token, navigate]);
+
   const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,9 +29,6 @@ const AdminLogin = () => {
   });
   const [status, setStatus] = useState(null); // { message, type }
   const [loading, setLoading] = useState(false);
-
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
